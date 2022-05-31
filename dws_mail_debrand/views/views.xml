@@ -1,0 +1,56 @@
+<odoo>
+    <data>
+        <record id="customize_sales_mail" model="ir.ui.view">
+            <field name="name">res.config.settings.inherited.view</field>
+            <field name="model">res.config.settings</field>
+            <field name="priority" eval="10"/>
+            <field name="inherit_id" ref="sale.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@data-key='sale_management']//div[@id='sale_config_online_confirmation_sign']" position="before">
+                       <div class="col-12 col-lg-6 o_setting_box" id="disable_buttons">
+                            <div class="o_setting_left_pane">
+                                 <field name="disable_buttons" />
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="disable_buttons"/>
+                                <span class="fa fa-lg "/>
+                                <div class="text-muted">
+                                    Disable View Online Button in emails
+                                </div>
+                            </div>
+                        </div>
+                </xpath>
+            </field>
+        </record>
+        <record id="message_notification_email_ext" model="ir.ui.view">
+            <field name="name">message.notification.email.ext</field>
+            <field name="model">mail</field>
+            <field name="priority" eval="10"/>
+            <field name="inherit_id" ref="mail.message_notification_email"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@summary='o_mail_notification']" position="replace">
+                       <div t-if="has_button_access or len(actions) &gt; 0 or not is_discussion" summary="o_mail_notification" style="padding: 0px; width:600px;">
+                            <table cellspacing="0" cellpadding="0" border="0" style="width: 600px; margin-top: 5px;">
+                            <tbody><tr>
+                            <td valign="center">
+                                <t t-if="actions">
+                                    <t t-foreach="actions" t-as="action">
+                                        |
+                                        <a t-att-href="action['url']" style="color: #875A7B; text-decoration:none !important;">
+                                            <t t-esc="action['title']"/>
+                                        </a>
+                                    </t>
+                                </t>
+                            </td>
+                            <td valign="center" align="right">
+                                <img t-att-src="'/logo.png?company=%s' % (company.id or 0)" style="padding: 0px; margin: 0px; height: auto; max-width: 200px; max-height: 36px;" t-att-alt="'%s' % company.name"/>
+                            </td>
+                            </tr>
+                            </tbody>
+                            </table>
+                        </div>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
